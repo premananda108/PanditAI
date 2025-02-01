@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Pandit AI</string>
+    <string name="hint_message">Type a message</string>
+    <string name="button_send">Send</string>
+    <string name="error_no_response">Server is not responding. Please try again later.</string>
+</resources>
