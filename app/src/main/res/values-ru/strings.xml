@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pandit AI</string>
+    <string name="hint_message">Введите сообщение</string>
+    <string name="button_send">Отправить</string>
+    <string name="error_no_response">Сервер не отвечает. Пожалуйста, попробуйте позже.</string>
+    <string name="message_copied">Текст скопирован в буфер обмена</string>
+    <string name="error_unknown">Произошла неожиданная ошибка</string>
+    <string name="error_server">Неизвестная ошибка сервера</string>
+</resources>

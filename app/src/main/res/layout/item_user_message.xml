@@ -5,8 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:layout_gravity="end"
-    android:background="?attr/colorPrimary">
+    android:background="@drawable/bg_user_message">
 
     <TextView
         android:id="@+id/messageText"

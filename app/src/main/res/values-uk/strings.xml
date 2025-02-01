@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Пандіт AI</string>
+    <string name="hint_message">Введіть повідомлення</string>
+    <string name="button_send">Надіслати</string>
+    <string name="error_no_response">Сервер не відповідає. Будь ласка, спробуйте пізніше.</string>
+    <string name="message_copied">Текст скопійовано в буфер обміну</string>
+    <string name="error_unknown">Сталася неочікувана помилка</string>
+    <string name="error_server">Невідома помилка сервера</string>
+</resources>
