@@ -43,14 +43,22 @@ class ChatViewModel : ViewModel() {
                     // Добавляем ответ ИИ в список
                     _messages.value = _messages.value + listOf(ChatMessage(aiResponse, false))
                 } else {
-                    _error.value = response.body()?.response ?: "Unknown error"
+                    // Если сервер вернул ошибку, добавляем её в чат
+                    val errorMessage = response.body()?.response ?: "Unknown server error"
+                    _messages.value =
+                        _messages.value + listOf(ChatMessage("Error: $errorMessage", false))
+                    _error.value = errorMessage
                 }
             } catch (e: java.net.SocketTimeoutException) {
-                _error.value = "Server is not responding. Please try again later."
+                val errorMessage = "Server is not responding. Please try again later."
+                _messages.value =
+                    _messages.value + listOf(ChatMessage("Error: $errorMessage", false))
+                _error.value = errorMessage
             } catch (e: Exception) {
-                _error.value = e.message
-                // Добавляем сообщение об ошибке в чат
-                _messages.value = _messages.value + listOf(ChatMessage("Error: ${e.message}", false))
+                val errorMessage = e.message ?: "An unexpected error occurred"
+                _messages.value =
+                    _messages.value + listOf(ChatMessage("Error: $errorMessage", false))
+                _error.value = errorMessage
             } finally {
                 _isLoading.value = false
             }

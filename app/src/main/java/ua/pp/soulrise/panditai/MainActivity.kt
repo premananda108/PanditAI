@@ -16,21 +16,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private val viewModel: ChatViewModel by viewModels()
 
+    // Ссылки на UI-элементы
+    private lateinit var sendButton: android.widget.Button
+    private lateinit var loadingIndicator: android.widget.ProgressBar
+    private lateinit var messageInput: android.widget.EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Настройка RecyclerView
+        // Инициализация UI-элементов
         val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.chatRecyclerView)
+        sendButton = findViewById(R.id.sendButton)
+        loadingIndicator = findViewById(R.id.loadingIndicator)
+        messageInput = findViewById(R.id.messageInput)
+
+        // Настройка RecyclerView
         chatAdapter = ChatAdapter()
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdapter
+        recyclerView.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
 
         // Подписка на изменения списка сообщений
         lifecycleScope.launchWhenStarted {
             viewModel.messages.collect { messages ->
                 chatAdapter.updateMessages(messages)
-                recyclerView.scrollToPosition(messages.size - 1)
+                recyclerView.scrollToPosition(messages.size - 1) // Прокручиваем вниз
             }
         }
 
@@ -38,13 +49,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             viewModel.isLoading.collect { isLoading ->
                 updateLoadingState(isLoading)
-            }
-        }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.messages.collect { messages ->
-                chatAdapter.updateMessages(messages)
-                recyclerView.scrollToPosition(messages.size - 1) // Прокручиваем вниз
             }
         }
 
@@ -56,9 +60,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Настройка панели ввода
-        val sendButton = findViewById<android.widget.Button>(R.id.sendButton)
-        val messageInput = findViewById<android.widget.EditText>(R.id.messageInput)
-
         sendButton.setOnClickListener {
             val message = messageInput.text.toString().trim()
             if (message.isNotEmpty()) {
@@ -69,9 +70,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateLoadingState(isLoading: Boolean) {
-        val sendButton = findViewById<android.widget.Button>(R.id.sendButton)
-        val loadingIndicator = findViewById<android.widget.ProgressBar>(R.id.loadingIndicator)
-
         sendButton.visibility = if (isLoading) View.GONE else View.VISIBLE
         loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
