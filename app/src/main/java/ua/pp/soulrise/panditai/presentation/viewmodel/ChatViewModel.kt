@@ -24,6 +24,9 @@ class ChatViewModel : ViewModel() {
     val error: StateFlow<String?> = _error
 
     fun sendMessage(message: String) {
+        // Сразу добавляем сообщение пользователя в список
+        _messages.value = _messages.value + listOf(ChatMessage(message, true))
+
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -37,10 +40,8 @@ class ChatViewModel : ViewModel() {
                 val response = RetrofitInstance.api.sendMessage(request)
                 if (response.isSuccessful && response.body()?.reaction == "ok") {
                     val aiResponse = response.body()?.response ?: "No response"
-                    _messages.value = _messages.value + listOf(
-                        ChatMessage(message, true),
-                        ChatMessage(aiResponse, false)
-                    )
+                    // Добавляем ответ ИИ в список
+                    _messages.value = _messages.value + listOf(ChatMessage(aiResponse, false))
                 } else {
                     _error.value = response.body()?.response ?: "Unknown error"
                 }
@@ -48,6 +49,8 @@ class ChatViewModel : ViewModel() {
                 _error.value = "Server is not responding. Please try again later."
             } catch (e: Exception) {
                 _error.value = e.message
+                // Добавляем сообщение об ошибке в чат
+                _messages.value = _messages.value + listOf(ChatMessage("Error: ${e.message}", false))
             } finally {
                 _isLoading.value = false
             }

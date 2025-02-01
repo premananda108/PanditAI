@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.messages.collect { messages ->
+                chatAdapter.updateMessages(messages)
+                recyclerView.scrollToPosition(messages.size - 1) // Прокручиваем вниз
+            }
+        }
+
         // Подписка на ошибки
         lifecycleScope.launchWhenStarted {
             viewModel.error.collect { error ->
@@ -56,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             val message = messageInput.text.toString().trim()
             if (message.isNotEmpty()) {
                 viewModel.sendMessage(message)
-                messageInput.text.clear()
+                messageInput.text.clear() // Очищаем поле ввода только после отправки
             }
         }
     }
